@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testCart2</title>
+
+    <script>
+
+        let barcodes = ["ITEM000000", "ITEM000000", "ITEM000002", "ITEM000004", "ITEM000004", "ITEM000002", "ITEM000000" ];
+        
+        let items = [
+            {
+                barcode: 'ITEM000000',
+                name: '可口可乐',
+                unit: '瓶',
+                price: 3.00
+            },
+            {
+                barcode: 'ITEM000001',
+                name: '雪碧',
+                unit: '瓶',
+                price: 3.00
+            },
+            {
+                barcode: 'ITEM000002',
+                name: '苹果',
+                unit: '斤',
+                price: 5.50
+            },
+            {
+                barcode: 'ITEM000003',
+                name: '荔枝',
+                unit: '斤',
+                price: 15.00
+            },
+            {
+                barcode: 'ITEM000004',
+                name: '电池',
+                unit: '个',
+                price: 2.00
+            },
+            {
+                barcode: 'ITEM000005',
+                name: '方便面',
+                unit: '袋',
+                price: 4.50
+            }
+        ]
+
+
+        function LoadAllItems() {
+            return items;
+        }
+        
+        function getCount(barcodes) {
+
+            let cartItems = []
+            for(let i=0; i<barcodes.length; i++) {
+                let exitItem = cartItems.find(function (item) {
+                    return item.barcode === barcodes[i];
+                });
+
+                if(exitItem) {      //存在，设置count 属性 +1
+                    exitItem.count++;
+                }
+                else {       // 不存在，将cartItem[i]对象复制给新对象，并向新对象添加count属性
+                    cartItems.push({ barcode: barcodes[i], count: 1});
+                }
+            }
+            //console.log(cartItems)
+            return cartItems
+        }
+        
+        function getItem(cartItems) {
+            let cartItemCount = []
+            for(let i=0; i<cartItems.length; i++) {
+                for(let j=0; j<items.length; j++) {
+                    if(cartItems[i].barcode === items[j].barcode) {
+                        cartItemCount.push(Object.assign({}, items[j], {count: cartItems[i].count}))
+                    }
+                }
+            }
+            //console.log(cartItemCount)
+            return cartItemCount
+        }
+        
+        function getSubtotal(cartItemCount) {
+            let cartItemSubtotal = [];
+            for(let i=0; i<cartItemCount.length; i++) {
+                let total = cartItemCount[i].price * cartItemCount[i].count;
+                cartItemSubtotal.push(Object.assign({}, cartItemCount[i], {subtotal: total}))
+            }
+            console.log(cartItemSubtotal)
+            return cartItemSubtotal
+        }
+        
+        function getSum(cartItemSubtotal) {
+            let sum = 0
+            for(let i=0; i<cartItemSubtotal.length; i++) {
+               sum += cartItemSubtotal[i].subtotal
+            }
+            console.log(sum)
+            return sum
+        }
+    
+        function print(cartItemSubtotal, sum) {
+            for(let i=0; i<cartItemSubtotal.length; i++) {
+                console.log("名称：" + cartItemSubtotal[i].name + "，数量：" + cartItemSubtotal[i].count + cartItemSubtotal[i].unit
+                        + ",单价：" + cartItemSubtotal[i].price  + "，小计：" + cartItemSubtotal[i].subtotal)
+            }
+            console.log("总计：" + sum)
+        }
+
+        function printReceipt() {
+            let items = LoadAllItems()
+            let cartItems = getCount(barcodes)
+            let cartItemCount = getItem(cartItems)
+            let cartItemSubtotal = getSubtotal(cartItemCount)
+            let sum = getSum(cartItemSubtotal)
+            print(cartItemSubtotal, sum)
+        }
+
+        printReceipt()
+
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>
